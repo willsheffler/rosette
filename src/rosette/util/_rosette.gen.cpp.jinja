@@ -1,0 +1,36 @@
+#include <pybind11/pybind11.h>
+
+namespace py = pybind11;
+
+{{forward}}
+
+
+PYBIND11_PLUGIN(_rosette) {
+    py::module rosette("_rosette", R"pbdoc(
+        docstring in _rosette.gen.cpp, **compiled on {{mydate}}**
+
+        _rosette docs
+        ------------
+
+        py\:currentmodule is:
+
+        .. py:currentmodule:: _rosette
+
+        autosummary is:
+
+        .. autosummary::
+           :toctree: _generate
+
+    )pbdoc");
+
+{{code}}
+
+// #ifdef VERSION_INFO
+//     rosette.attr("__version__") = py::str(VERSION_INFO);
+// #else
+//     rosette.attr("__version__") = py::str("dev");
+// #endif
+
+    return rosette.ptr();
+
+}
