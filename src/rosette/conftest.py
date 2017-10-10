@@ -1,7 +1,7 @@
 import pytest
 import os
 from os.path import join, dirname, abspath, exists
-from rif import rcl
+from rosette import rcl
 
 
 @pytest.fixture(scope='session')
