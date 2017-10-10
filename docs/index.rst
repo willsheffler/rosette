@@ -10,3 +10,7 @@ Rosette Documentation
 
    contributing_include
 
+   plan
+
+   apidoc/rosette
+

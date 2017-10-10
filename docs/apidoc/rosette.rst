@@ -1,0 +1,7 @@
+
+Subpackages
+-----------
+
+.. toctree::
+
+    rosette.energy
