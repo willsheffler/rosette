@@ -1,0 +1,25 @@
+name: rtd
+channels:
+- dean0x7d
+- defaults
+dependencies:
+- python>=3.5
+- sphinx>=1.5.1
+- sphinx_rtd_theme>=0.1.9
+- numpy>=1.13
+- curl
+#- doxygen
+- pip
+- boost
+- cmake
+- pytest
+- pandas
+- seaborn
+- xarray
+- jinja2
+- PyYAML
+- pip:
+  - breathe
+  - hypothesis
+  - parsimonious
+  - sphinxcontrib-napoleon
