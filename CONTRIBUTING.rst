@@ -4,11 +4,8 @@ Contributing
 .. inclusion-marker-do-not-remove
 
 
-How to contribute
-------------------
-
-Install Dependencies
-~~~~~~~~~~~~~~~~~~~~~~
+Dependencies
+----------------------
 
 you need python3, and a c++11 capable compiler. maybe boost will be a requirement at some point. if you have those things, you can install all the other dependencies like so:
 
@@ -16,7 +13,7 @@ you need python3, and a c++11 capable compiler. maybe boost will be a requiremen
 - python3 -m pip install -rrequirements (--user for non-root, --upgrade to upgrade)
 
 Building
-~~~~~~~~~
+---------
 The build system is driven with cmake. There is a wrapper in setup.py which calls cmake with the right options to put stuff in the right places. the CMakeLists.txt file calls a couple of scripts in the tools directory (which should probably get cleaned up and put in a separate package) that coordinate c++/python integration.
 
 Ways to build:
@@ -29,7 +26,7 @@ Ways to build:
 
 
 Testing
-~~~~~~~~
+--------
 Pytest is the main test harness. all gtests in *.gtest.cpp files are build into a binary gtest_all, which should integrate with pytest using pytest-cpp. Encourage use of hypothesis_. See test_basic_energy_safe_ for a cool example randomly generating test cases and validating based on a test oracle strategy.
 
 Ways to run tests:
@@ -38,8 +35,11 @@ Ways to run tests:
 - python3 tools/build_and_test.py --inplace <file> will run one test with "smart" dispatching
 - pip install .; python3 -mpytest --pyargs rosette
 
+Developing
+---------------
+
 Adding a C++ module
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
 
 We use pybind11_, a great library for python/c++ interoperability. To add a c++ module, create a file called path/to/my_module.pybind.cpp which defines a function:
 
@@ -58,7 +58,7 @@ We use pybind11_, a great library for python/c++ interoperability. To add a c++ 
 This function will be auto-detected by the build system and called with a pybind11_s module rif.path.to.my_module, i.e. module namespaces based on the file path. If your filename starts in caps: path/to/MyClass.pybind.cpp, the module m will instead be rif.path.to. That is, build system will assume this is a class that you will bind and should not be a module namespace. (This inconsistency is maybe not a good idea?)
 
 Adding a gtest for c++ module
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Create a file called path/to/my_module.gtest.cpp and all the tests it contains will be run automatically. you can run only the gtests by either 'find build* -name gtest_all' and running the appropriate one, or 'python3 tools/build_and_test.py path/to/my_module.[hpp or .gtest.cpp]'. this is handy for editor integration.
 
 
@@ -79,9 +79,17 @@ Editor Integration
 
 To run c++ tests, pytests, build docs, or test everything based on context, use: "python3 tools/build_and_test.py --inplace $file" from your editor. Will knows how to do it in sublime text.
 
-Releases
-~~~~~~~~~~
-want to set it up so any push to 'release' branch goes up to pypi automatically. annoying, because linux releasese *must* use this manylinux1 platform, which is a least-common-denominator of all supported platforms. CentOS 5... yuck! A docker image is available. The following is a work in progress.
+
+
+Continuous Integration and Deployment
+--------------------------------------
+CI
+~~~
+We are set up for continuous integrating using travis-ci.org for ubuntu and macos platforms. appveyer is a free option for windows testing if we decide we want it. anything that depends on pyrosetta currently won't run on travis... could be fixed, at the expense of turnaround times (installing pyrosetta on each test instance will take time). Let me know if you have a branch you want automatically tested. Prepend your commit message with "[skip ci]" will skip the travis-ci tests.
+
+CD
+~~~
+We want to set it up so any push to 'release' branch goes up to pypi automatically. annoying, because linux releasese *must* use this manylinux1 platform, which is a least-common-denominator of all supported platforms. CentOS 5... yuck! A docker image is available. The following is a work in progress.
 
 .. code-block:: bash
 

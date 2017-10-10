@@ -1,5 +1,5 @@
 
-Subpackages
+Rosette API
 -----------
 
 .. toctree::
