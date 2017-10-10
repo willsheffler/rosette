@@ -1,6 +1,7 @@
 numpy
 pyyaml
 jinja2
+mock
 pytest
 pytest-cov
 pytest-sugar
