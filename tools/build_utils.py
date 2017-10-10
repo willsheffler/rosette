@@ -308,6 +308,9 @@ def build_and_test(projname):
     # print('== calling rebuild_fast ==')
     no_xdist = len(testfiles) or len(gtests)
     no_xdist |= os.system('egrep "#.*cpp_files" pytest.ini') == 0
+
+    no_xdist = True
+
     # no_xdist |= sys.version_info.major is 3 and sys.version_info.minor is 6
     force_redo_cmake = len(pybindfiles) or not no_xdist or src_dir_new_file()
     rebuild_fast(target='_' + projname + ' gtest_all',

@@ -82,7 +82,7 @@ def is_initialized():
 def init_check(options=None, strict=True):
     if options is None:
         strict = False
-        options = '-corrections:beta_nov16 -mute all'
+        options = '-beta -mute all'
     global pyrosetta_init_options
     if pyrosetta_init_options is None:
         pyrosetta.init(options=options)

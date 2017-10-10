@@ -23,16 +23,22 @@ def isdocfile(fname):
     return fname.endswith('/docs/conf.py') or fname.endswith('.rst')
 
 
-def run_docs():
+def run_docs(projname):
     rstfiles = [arg for arg in sys.argv[1:] if isdocfile(arg)]
     assert rstfiles
     rstfile = rstfiles[0]
-    docsloc = rstfile[:rstfile.rfind('/docs/') + 5]
+    print(rstfile)
+    idocs = rstfile.rfind('/docs/')
+    if idocs == -1:
+        docsloc = rstfile[:rstfile.rfind(
+            '/' + projname + '/') + len(projname) + 1] + '/docs'
+    else:
+        docsloc = rstfile[:idocs + 5]
     print(docsloc)
     shell_cmd = "cd %s && make html 2>&1 | tee ../log/subl_build.log" % docsloc
     print(shell_cmd)
     assert not os.system(shell_cmd)
-    url = docsloc + "/_build/html"
+    url = docsloc + "/_build/html/index.html"
     os.system('google-chrome %s' % url)
 
 

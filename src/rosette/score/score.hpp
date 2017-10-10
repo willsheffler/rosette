@@ -15,9 +15,9 @@ F dummy_func() {
 }
 
 template <typename F>
-MatX<F> rosette_score_safe(Ref<MatX4<F>> atoms, Ref<VecX<int32_t>> atype,
-                           Ref<VecX<int32_t>> exatype,
-                           Ref<MatX4<int32_t>> connect) {
+MatX<F> rosette_score_safe(RefMatX4<F> atoms, RefVecX<int32_t> atype,
+                           RefVecX<int32_t> exatype,
+                           RefMatX4<int32_t> connect) {
   MatX<F> scores(atoms.rows(), (int)Etype::Ntypes);
   for (int iatom = 0; iatom < atoms.rows(); ++iatom) {
     // std::cout << iatom << " " << atoms.row(iatom) << ' ' << atype[iatom] << "

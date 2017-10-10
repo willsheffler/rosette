@@ -11,7 +11,7 @@ def randang():
     return 360.0 * random() - 180.0
 
 
-# for different elec types
+# for different elec types, needs to be filled in...
 def exatype_from_names(res_name3, atom_name):
     return 0
 
@@ -27,6 +27,7 @@ def make_random_pose(seq):
     return p
 
 
+# almost certainly not correct....
 def pose_to_rosette(pose):
     Ntot = sum(r.natoms() for r in pose)
     atoms = np.zeros((Ntot, 4), dtype='f8')
