@@ -355,7 +355,7 @@ def build_and_test(projname):
         args = list(testfiles)
         if not (testfiles or gtests):
             # args = ['buildR', '--pyargs', projname, ]
-            args = ['--pyargs', projname, ]
+            args = ['buildR', '--pyargs', projname, ]
         args.extend(['--doctest-modules'])
         args.extend(['--ignore', 'build'])
         args.extend(['--ignore', 'src'])

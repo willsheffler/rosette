@@ -29,16 +29,24 @@ def run_docs(projname):
     rstfile = rstfiles[0]
     print(rstfile)
     idocs = rstfile.rfind('/docs/')
+    relpath = rstfile[idocs + 1:]
     if idocs == -1:
-        docsloc = rstfile[:rstfile.rfind(
-            '/' + projname + '/') + len(projname) + 1] + '/docs'
+        idocs = rstfile.rfind(
+            '/' + projname + '/') + len(projname) + 1
+        docsloc = rstfile[:idocs] + '/docs'
+        relpath = rstfile[idocs:]
     else:
         docsloc = rstfile[:idocs + 5]
     print(docsloc)
     shell_cmd = "cd %s && make html 2>&1 | tee ../log/subl_build.log" % docsloc
     print(shell_cmd)
     assert not os.system(shell_cmd)
-    url = docsloc + "/_build/html/index.html"
+    relpath = relpath.replace('README.rst', 'readme_include.html')
+    relpath = relpath.replace('CONTRIBUTING.rst', 'contributing_include.html')
+    relpath = relpath.replace('.rst', '.html')
+    url = docsloc + "/_build/html/" + relpath
+    if not os.path.exists(url):
+        url = docsloc + '/_build/html/index.html'
     os.system('google-chrome %s' % url)
 
 

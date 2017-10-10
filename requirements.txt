@@ -1,0 +1,13 @@
+numpy
+pyyaml
+jinja2
+pytest
+pytest-cov
+pytest-sugar
+pytest-xdist
+-e external/hacked_packages/pytest-cpp-0.4
+hypothesis
+sphinx
+breathe
+sphinx_rtd_theme
+sphinxcontrib-napoleon
