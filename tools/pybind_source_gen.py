@@ -79,7 +79,7 @@ def gen__init__(srcdir):
 
 
 def get_pybind_modules(srcpath):
-    "find ROSETTELIB_PYBIND_ functions in *.pybind.cpp files"
+    "find __PYBIND__ functions in *.pybind.cpp files"
     cppmodules = OrderedDict()
     for root, _, files in os.walk(srcpath):
         for basename in (x for x in files if x.endswith('.pybind.cpp')):
@@ -90,18 +90,23 @@ def get_pybind_modules(srcpath):
                 # todo: replace this with python
                 try:
                     grepped = subprocess.check_output(
-                        ['grep', '-H', 'ROSETTELIB_PYBIND_', pybindfile])
+                        ['grep', '-H', '__PYBIND__', pybindfile])
                 except subprocess.CalledProcessError:
                     grepped = ''
             except OSError:
                 continue
             for line in grepped.splitlines():
+                # print("LINE", line)
                 line = str(line)
                 match = re.match(
-                    r".*src/rosette/(.+).pybind.cpp\:.* ROSETTELIB_PYBIND_(\w+)", line)
+                    r".*src/rosette/(.+).pybind.cpp\:.* __PYBIND__(\w+)", line)
                 # print 'line:', line
                 # print match
                 # assert len(match.groups()) is 2
+                if not match:
+                    if not re.match(r'^[^:]*[:]\s*[/][/].*$', line):
+                        print("WARNING ignoring line", line)
+                    continue
                 path = match.group(1)
                 func = match.group(2)
                 if os.path.basename(path)[0].isupper():
@@ -124,7 +129,7 @@ def update_file_if_needed(destfile, newcontent):
             diff = subprocess.check_output(['diff', testfile, destfile])
         except subprocess.CalledProcessError as e:
             diff = e.output
-        if len(diff.splitlines()) is 4 and 'compiled on' in diff:
+        if len(diff.splitlines()) is 4 and b'compiled on' in diff:
             diff = None
     if diff:
         if DBG:
@@ -153,9 +158,9 @@ def shitty_make_code(cppmodules):
                   '");' + os.linesep)
     code2 += os.linesep
     for func, path in list(cppmodules.items()):
-        code1 += 'void ROSETTELIB_PYBIND_' + func + \
+        code1 += 'void __PYBIND__' + func + \
             '(py::module & m);' + os.linesep
-        code2 += '    ROSETTELIB_PYBIND_' + func + \
+        code2 += '    __PYBIND__' + func + \
             '(' + path.replace('/', '__') + ');' + os.linesep
     return code1, code2
 

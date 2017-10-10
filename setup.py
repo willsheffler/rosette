@@ -46,7 +46,6 @@ def get_my_python():
     my_python = my_python.replace('software', 'S')
     my_python = my_python.replace(home, 'H')
     my_python = my_python.replace('python', 'Py')
-    my_python = my_python.replace('rosette', 'R')
     my_python = my_python.replace('/', '')
     return my_python
 
@@ -91,18 +90,18 @@ def infer_config_from_build_dirname(path):
 ###############################################################################
 
 
-_rosette_setup_opts = defaultdict(list)
+_local_setup_opts = defaultdict(list)
 _remove_from_sys_argv = list()
 for arg in sys.argv:
-    if arg.startswith('--rosette_setup_opts_'):
+    if arg.startswith('--local_setup_opts_'):
         flag, val = arg.split('=')
-        _rosette_setup_opts[flag[17:]] = val.split(',')
+        _local_setup_opts[flag[17:]] = val.split(',')
         _remove_from_sys_argv.append(arg)
 for arg in _remove_from_sys_argv:
     sys.argv.remove(arg)
-if _rosette_setup_opts:
-    print('setup.py: rosette args:')
-    for flag, val in _rosette_setup_opts.items():
+if _local_setup_opts:
+    print('setup.py: --local_setup_opts_* args:')
+    for flag, val in _local_setup_opts.items():
         print('    ', flag, '=', val)
 
 # print('setup.py: compiler:', get_my_compiler())
@@ -194,8 +193,8 @@ class CMakeBuild(build_ext):
         else:
             cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
             build_args += ['--', '-j' + str(ncpu)]
-        cmake_args += _rosette_setup_opts['cmake_args']
-        build_args += _rosette_setup_opts['build_args']
+        cmake_args += _local_setup_opts['cmake_args']
+        build_args += _local_setup_opts['build_args']
         cmake_args += ['-DPYTHON_EXECUTABLE:FILEPATH=' + sys.executable, ]
 
         env = os.environ.copy()
@@ -234,22 +233,6 @@ class CMakeBuild(build_ext):
         if os.path.exists(defaultextdir):
             os.remove(defaultextdir)
         os.symlink(extdir, defaultextdir)
-
-
-# took these out... goal: have cmake manage everything
-# def isdatfile(f):
-#     return f.endswith('.gz') or f.endswith('csv') or f.endswith('.dat')
-
-
-# def marshal_package_data():
-#     pdat = list()
-#     for root, dirs, files in os.walk('src/rosette'):
-#         d = root.replace('src/rosette/', '')
-#         datfiles = [os.path.join(d, f) for f in files if isdatfile(f)]
-#         if datfiles:
-#             print('marshaling datfiles:', d)
-#             pdat.extend(datfiles)
-#     return pdat
 
 
 setup(

@@ -3,6 +3,11 @@
 	[
 		{
 			"file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
+			"name": "adaptive_build_and_test",
+			"shell_cmd": "cd $folder && python3 tools/build_and_test.py $file --inplace 2>&1 | tee log/subl_build.log"
+		},
+		{
+			"file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
 			"name": "Anaconda Python Builder",
 			"selector": "source.python",
 			"shell_cmd": "\"/usr/bin/python\" -u \"$file\""
@@ -11,7 +16,41 @@
 	"folders":
 	[
 		{
-			"path": "/home/sheffler/rosette"
+			"file_exclude_patterns":
+			[
+				"*.pyc",
+				"*.pyo",
+				"*.o",
+				"*.a",
+				"*.lib",
+				"*.so",
+				"*.dylib",
+				".DS_Store",
+				"*.sublime-workspace",
+				".tags*",
+				"test.sxhn",
+				"test.sxm"
+			],
+			"folder_exclude_patterns":
+			[
+				"build*",
+				"_build*",
+				".build*",
+				".git",
+				".cache",
+				".idea",
+				"__pycache__",
+				".hypothesis",
+				".eggs",
+				".tox",
+				"external/googletest",
+				"external/include",
+				"external/pybind11",
+				"deps",
+				"dist",
+				"*.egg-info"
+			],
+			"path": ".."
 		}
 	]
 }
